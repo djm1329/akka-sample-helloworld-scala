@@ -34,6 +34,10 @@ class HttpServer(helloActor: ActorRef)(implicit system: ActorSystem) extends Laz
                 case Success(GreeterActor.Done) => complete(StatusCodes.OK -> s"greeter says hello\n")
                 case Success(_) => complete(StatusCodes.InternalServerError)
             }
+        } ~
+        (get & path("goodbye")) {
+            stopServer
+            complete(StatusCodes.OK -> s"Goodbye!\n")
         }
   
     val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 8080)
@@ -41,6 +45,13 @@ class HttpServer(helloActor: ActorRef)(implicit system: ActorSystem) extends Laz
         case Success(binding) =>
             logger.info("HttpServer started, ready to service requests on " + binding.localAddress.toString)
         case Failure(ex) => logger.error("Failed to start HttpServer", ex) 
+    }
+
+    def stopServer: Unit = {
+        bindingFuture.map{binding => 
+            binding.terminate(2 seconds)
+            system.terminate
+        }
     }
 }
 

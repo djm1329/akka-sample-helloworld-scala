@@ -19,7 +19,7 @@ class HelloWorldActor extends Actor with ActorLogging {
 
    override def preStart(): Unit = {
       // tell the greeter to perform the greeting
-      greeter ! Greet
+      // greeter ! Greet
    }
 
   def receive = {
