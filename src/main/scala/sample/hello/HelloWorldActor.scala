@@ -3,19 +3,19 @@ package sample.hello
 import akka.actor._
 import ch.qos.logback.core.pattern.color.GreenCompositeConverter
 
-object HelloWorld {
-   def props(): Props = Props(new HelloWorld())
+object HelloWorldActor {
+   def props(): Props = Props(new HelloWorldActor())
 
    case object AskForGreeting
 }
 
-class HelloWorld extends Actor with ActorLogging {
+class HelloWorldActor extends Actor with ActorLogging {
 
-   import HelloWorld._
-   import Greeter._
+   import HelloWorldActor._
+   import GreeterActor._
 
    // create the greeter actor
-   val greeter: ActorRef = context.actorOf(Greeter.props(), "greeter")
+   val greeter: ActorRef = context.actorOf(GreeterActor.props(), "greeter")
 
    override def preStart(): Unit = {
       // tell the greeter to perform the greeting

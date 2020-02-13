@@ -21,7 +21,7 @@ object HttpServer {
 }
 
 class HttpServer(helloActor: ActorRef)(implicit system: ActorSystem) extends LazyLogging {
-    import HelloWorld._
+    import HelloWorldActor._
 
     implicit val ec: ExecutionContext = system.dispatcher
     implicit val timeout = Timeout(2 seconds)
@@ -31,7 +31,7 @@ class HttpServer(helloActor: ActorRef)(implicit system: ActorSystem) extends Laz
             val f = (helloActor ? AskForGreeting)
             onComplete(f) {
                 case Failure(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = ex.toString))
-                case Success(Greeter.Done) => complete(StatusCodes.OK -> s"greeter says hello\n")
+                case Success(GreeterActor.Done) => complete(StatusCodes.OK -> s"greeter says hello\n")
                 case Success(_) => complete(StatusCodes.InternalServerError)
             }
         }
