@@ -3,13 +3,17 @@ package sample.hello
 import akka.actor.ActorSystem
 
 import com.typesafe.scalalogging.LazyLogging
+import _root_.sample.hello.sample.sharding.HttpServer
 
 object HelloApp extends App with LazyLogging {
 
    logger.info("starting actor system")
-   val system = ActorSystem("HelloActorSystem")
+   implicit val system = ActorSystem("HelloActorSystem")
 
    logger.info("starting top-level HelloWorld actor")
-   system.actorOf(HelloWorld.props, "HelloWorldActor")
+   val helloActor = system.actorOf(HelloWorld.props, "HelloWorldActor")
+
+   logger.info("starting HTTP server")
+   HttpServer(helloActor)
 
 }

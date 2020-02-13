@@ -1,23 +1,30 @@
 package sample.hello
 
 import akka.actor._
+import ch.qos.logback.core.pattern.color.GreenCompositeConverter
 
 object HelloWorld {
    def props(): Props = Props(new HelloWorld())
+
+   case object AskForGreeting
 }
 
 class HelloWorld extends Actor with ActorLogging {
 
-  override def preStart(): Unit = {
-     // create the greeter actor
-     val greeter: ActorRef = context.actorOf(Greeter.props(), "greeter")
-     // tell it to perform the greeting
-     greeter ! Greeter.Greet
-  }
+   import HelloWorld._
+   import Greeter._
+
+   // create the greeter actor
+   val greeter: ActorRef = context.actorOf(Greeter.props(), "greeter")
+
+   override def preStart(): Unit = {
+      // tell the greeter to perform the greeting
+      greeter ! Greet
+   }
 
   def receive = {
-     // when the greeter is done, stop this actor and with it the application
-     case Greeter.Done => context.stop(self)
+     case AskForGreeting => greeter forward Greet
+     case Done => 
   }
 
   override def postStop(): Unit = {
