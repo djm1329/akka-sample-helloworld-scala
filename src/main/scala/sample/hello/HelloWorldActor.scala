@@ -2,22 +2,22 @@ package sample.hello
 
 import akka.actor._
 
-object HelloWorld {
-   def props(): Props = Props(new HelloWorld())
+object HelloWorldActor {
+   def props(): Props = Props(new HelloWorldActor())
 }
 
-class HelloWorld extends Actor with ActorLogging {
+class HelloWorldActor extends Actor with ActorLogging {
 
   override def preStart(): Unit = {
      // create the greeter actor
-     val greeter: ActorRef = context.actorOf(Greeter.props(), "greeter")
+     val greeter: ActorRef = context.actorOf(GreeterActor.props(), "greeter")
      // tell it to perform the greeting
-     greeter ! Greeter.Greet
+     greeter ! GreeterActor.Greet
   }
 
   def receive = {
      // when the greeter is done, stop this actor and with it the application
-     case Greeter.Done => context.stop(self)
+     case GreeterActor.Done => context.stop(self)
   }
 
   override def postStop(): Unit = {

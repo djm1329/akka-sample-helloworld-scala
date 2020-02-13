@@ -10,6 +10,6 @@ object HelloApp extends App with LazyLogging {
    val system = ActorSystem("HelloActorSystem")
 
    logger.info("starting top-level HelloWorld actor")
-   system.actorOf(HelloWorld.props, "HelloWorldActor")
+   system.actorOf(HelloWorldActor.props, "HelloWorldActor")
 
 }

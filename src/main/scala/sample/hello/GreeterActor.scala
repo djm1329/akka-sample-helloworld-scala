@@ -2,16 +2,16 @@ package sample.hello
 
 import akka.actor._
 
-object Greeter {
-  def props(): Props = Props(new Greeter())
+object GreeterActor {
+  def props(): Props = Props(new GreeterActor())
 
   case object Greet
   case object Done
 }
 
-class Greeter extends Actor with ActorLogging {
+class GreeterActor extends Actor with ActorLogging {
 
-  import Greeter._
+  import GreeterActor._
 
   def receive = {
     case Greet =>
